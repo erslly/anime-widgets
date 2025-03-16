@@ -1,0 +1,23 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "node -e 'console.clear()' && bun run --no-warnings ./src/index.js"
+  },
+  "devDependencies": {
+    "eslint": "^9.16.0",
+    "prettier": "^3.4.1"
+  },
+  "dependencies": {
+    "axios": "^1.8.3",
+    "colorette": "^2.0.20",
+    "consola": "^3.4.0",
+    "cors": "^2.8.5",
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.1",
+    "express-file-routing": "^3.0.3",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0"
+  }
+}
