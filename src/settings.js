@@ -3,11 +3,11 @@ const settings = {
 	node: "development",
 	discord: {
 		server: {
-			id: "1323246016698388562",
-			code: "vUd46aQj",
+			id: "1329924162956820560",
+			code: "setscript",
 		},
-		id: "1102520176165007402",
-		token: "MTEwMjUyMDE3NjE2NTAwNzQwMg.GZeH6p.l9thuk9tqt5UelZ1FQQs4CgUwGPYM2onq4tVJg",
+		id: "1338133948156350546",
+		token: "MTMzODEzMzk0ODE1NjM1MDU0Ng.G9So61.N8pPM7jmOEF6UfDlEohmG2GgqwuljEt41nwjTw",
 	},
 	api: {
 		port: 3000,
