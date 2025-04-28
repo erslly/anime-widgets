@@ -7,8 +7,7 @@ import { Collection } from "discord.js";
 
 export class UserManager {
 	constructor() {
-		this.headers = { Authorization: `Bot ${settings.discord.token}` };
-		/** @type {Collection<string, import("@/jsdoc.js").UserData>} */
+		this.headers = { Authorization: `Bot ${settings.discord.bot.token}` };
 		this.cache = new Collection();
 	}
 
@@ -21,11 +20,10 @@ export class UserManager {
 			const headers = this.headers;
 			const response = await axios.get(`https://discord.com/api/v10/users/${id}`, { headers });
 
-			/** @type {{ banner: string; banner_color: string; }} */
-			const { banner, banner_color } = response.data;
-			const banner_url = banner ? `https://cdn.discordapp.com/banners/${id}/${banner}` : null;
+			const { banner, banner_color: themeColor } = response.data;
+			const bannerURL = banner ? `https://cdn.discordapp.com/banners/${id}/${banner}` : null;
 
-			return { banner, banner_color, banner_url };
+			return { banner, themeColor, bannerURL };
 		}
 		catch (error) {
 			if (error instanceof AxiosError) {
@@ -35,7 +33,7 @@ export class UserManager {
 				throw consola.error(error.message);
 			}
 
-			return { banner: null, banner_color: null, banner_url: null };
+			return { banner: null, themeColor: null, bannerURL: null };
 		}
 	}
 
@@ -58,26 +56,72 @@ export class UserManager {
 
 	/**
    * @param {import("discord.js").GuildMember} member
-   * @returns {Promise<import("@/jsdoc.js").UserData>}
    */
 	async build(member) {
-		const { id, username, avatar, defaultAvatarURL } = member.user;
-		const { displayName, presence } = member;
+		const {
+			user: {
+				id,
+				username,
+				avatar,
+				globalName,
+				defaultAvatarURL,
+				bot,
+				flags,
+			},
+			displayName,
+			presence,
+		} = member;
 
-		const flags = member.user.flags.toJSON();
-		const banner = await this.fetchBanner(id);
+		const { banner, themeColor, bannerURL } = await this.fetchBanner(id).catch(() => ({
+			banner: null,
+			themeColor: null,
+			bannerURL: null,
+		}));
+
+		const activities = (presence?.activities ?? []).map((activity) => {
+			const {
+				name,
+				type,
+				details,
+				state,
+				applicationId,
+				timestamps,
+				assets,
+				url,
+			} = activity;
+			const emoji = activity.emoji && {
+				id: activity.emoji.id,
+				name: activity.emoji.name,
+			};
+
+			return {
+				name,
+				type,
+				details,
+				state,
+				emoji,
+				applicationId,
+				timestamps,
+				assets,
+				url,
+			};
+		});
 
 		return {
 			id,
 			username,
-			display_name: displayName,
+			globalName,
+			displayName,
+			bot,
 			avatar,
-			avatar_url: member.user.displayAvatarURL(),
-			default_avatar: defaultAvatarURL,
-			...banner,
-			flags,
+			avatarURL: member.displayAvatarURL?.(),
+			defaultAvatarURL,
+			flags: flags?.toJSON() ?? [],
+			banner,
+			bannerURL,
+			themeColor,
 			status: presence?.status ?? "offline",
-			activities: presence?.activities ?? [],
+			activities,
 			platform: presence?.clientStatus ?? {},
 		};
 	}

@@ -1,7 +1,7 @@
 // @ts-check
 import settings from "@/settings.js";
 import { client } from "@/utils/client.js";
-import manager from "@/utils/manager";
+import manager from "@/utils/manager.js";
 
 /** @type {import("express").Handler} */
 export async function get(req, res) {

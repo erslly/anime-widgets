@@ -12,6 +12,6 @@ export const client = new Client({
 client.on(Events.ClientReady, onReady);
 
 export async function start() {
-	await client.login(settings.discord.token);
+	await client.login(settings.discord.bot.token);
 }
 
