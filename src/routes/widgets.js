@@ -31,7 +31,7 @@ router.get("/widgets/myanimelist", headers.svg, async (req, res) => {
 		return;
 	}
 
-	res.status(200).send(svg.create({ css: styles.myanimelist, html: views.myanimelist(user) }));
+	res.status(200).send(svg.create({ css: styles.myanimelist, html: (await views.myanimelist(user)) }));
 });
 
 

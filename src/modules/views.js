@@ -1,11 +1,12 @@
 // @ts-check
-import { headers, StatusColor } from "@/modules/general.js";
+import { Colors, headers } from "@/modules/general.js";
 import { dateFormat } from "@/utils/date.js";
 import { calculate } from "@/utils/math.js";
 import { trim } from "@/utils/strings.js";
+import axios from "axios";
 
 /** @param {import("@/jsdoc.js").User} user */
-function myanimelist(user) {
+async function myanimelist(user) {
 	function summary() {
 		return `<div class="flex justify-between text-xs font-light text-white">
       <div>
@@ -48,7 +49,7 @@ function myanimelist(user) {
 	function formats(key, value) {
 		return `<div class="flex justify-between">
     <div class="flex items-center gap-3 text-sm">
-      ${key in StatusColor ? `<div class="size-3 rounded-full bg-[${StatusColor[key]}]"></div>` : ""}
+      ${key in Colors ? `<div class="size-3 rounded-full bg-[${Colors[key]}]"></div>` : ""}
       <span class="font-normal text-[#9ca3af]">${key}:</span>
     </div>
     
@@ -60,14 +61,20 @@ function myanimelist(user) {
    * @param {import("@/jsdoc.js").UpdateItem} item
    * @returns
    */
-	function entry(item) {
+	async function entry(item) {
+		const res = await axios.get(item.entry.images.webp.image_url, { responseType: "arraybuffer" });
+		const buffer = res.data;
+		const base64 = buffer.toString("base64");
+
+		const base64img = `data:image/png;base64,${base64}`;
+
 		return `<div class="flex items-start justify-start w-full gap-2">
-          <img src="${item.entry.images.webp.image_url}" class="h-[60px] w-[40px] rounded-sm" />
+          <img src="${base64img}" class="h-[60px] w-[40px] rounded-sm" />
           <div class="flex  items-end gap-16  w-full">
            <div class="w-full">
               <span class="text-sm">${trim(item.entry.title, 60)}</span>
             <div class="w-full h-4 bg-[#272727] rounded-sm py-[2px] px-[4px]">
-              ${item.episodes_seen && item.episodes_total ? `<div class="h-full w-[${calculate(item.episodes_seen, item.episodes_total)}%] bg-[${StatusColor[item.status]}] rounded-sm"></div>` : `<div class="h-full w-[25%] bg-[${StatusColor[item.status]}] rounded-sm"></div>`}
+              ${item.episodes_seen && item.episodes_total ? `<div class="h-full w-[${calculate(item.episodes_seen, item.episodes_total)}%] bg-[${Colors[item.status]}] rounded-sm"></div>` : `<div class="h-full w-[25%] bg-[${Colors[item.status]}] rounded-sm"></div>`}
             </div>
              <div class="flex m-1 justify-between items-center">
                <span class="text-xs">${item.status} <span class="text-white">${item.episodes_seen || "∞"}</span>/${item.episodes_total || "∞"} · Scored <span class="${item.score === 0 ? "text-[#9ca3af]" : "text-white"}">${item.score || "-"}</span></span>
@@ -105,12 +112,12 @@ function myanimelist(user) {
     </div>`;
 	}
 
-	function right() {
+	async function right() {
 		return `<div class="w-1/2">
     <h3 class="text-sm font-light">Last Anime Updates</h3>
     <div class="mt-2 w-full flex flex-col gap-2">
       ${user.updates.anime.length === 0 ? "<span class='text-[#9ca3af] text-sm'>Access to this list has been restricted by the owner.</span>" : ""}
-      ${user.updates.anime.slice(0, 3).map(entry).join(" ")}
+      ${(await Promise.all(user.updates.anime.slice(0, 3).map(async (val) => await entry(val)))).join(" ")}
     </div>
     </div>`;
 	}
@@ -120,7 +127,7 @@ function myanimelist(user) {
 
     <div class="mt-4 flex w-full gap-3" style="min-height: 200px;">
       ${left()}
-      ${right()}
+      ${await right()}
     </div>
   </div>`;
 }
