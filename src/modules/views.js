@@ -68,7 +68,7 @@ async function myanimelist(user) {
            <div class="w-full">
               <span class="text-sm">${trim(item.entry.title, 60)}</span>
             <div class="w-full h-4 bg-[#272727] rounded-sm py-[2px] px-[4px]">
-              ${(item.episodes_seen && item.episodes_total) ? `<div class="h-full bg-[${Colors[item.status]}] rounded-sm" style="width: ${calculate(item.episodes_seen, item.episodes_total)}%"></div>` : `<div class="h-full bg-[${Colors[item.status]}] rounded-sm" style="width: 25%"></div>`}
+              ${(item.episodes_seen && item.episodes_total) ? `<div class="h-full bg-[${Colors[item.status]}] rounded-sm" style="width: ${calculate(item.episodes_seen, item.episodes_total)}%"></div>` : `<div class="h-full bg-[${Colors[item.status]}] rounded-sm" style="width: ${item.status === "Plan to Watch" ? "0" : "25"}%"></div>`}
             </div>
              <div class="flex m-1 justify-between items-center">
                <span class="text-xs">${item.status} <span class="text-white">${item.episodes_seen || "∞"}</span>/${item.episodes_total || "∞"} · Scored <span class="${item.score === 0 ? "text-[#9ca3af]" : "text-white"}">${item.score || "-"}</span></span>
