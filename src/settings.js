@@ -15,7 +15,7 @@
 const settings = {
 	node: "development",
 	api: {
-		port: 3745,
+		port: 3000,
 	},
 	get url() {
 		return `https://localhost:${this.api.port}`;
