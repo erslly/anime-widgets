@@ -5,6 +5,13 @@ export const require = createRequire(import.meta.url);
 
 /**
  *
+ * @param {number} value
+ * @returns
+ */
+export const pad = (value) => String(value).padStart(2, "0");
+
+/**
+ *
  * @param {number} ms
  * @returns
  */
