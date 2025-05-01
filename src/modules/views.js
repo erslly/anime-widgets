@@ -2,8 +2,7 @@
 import { Colors, headers } from "@/modules/general.js";
 import { dateFormat } from "@/utils/date.js";
 import { calculate } from "@/utils/math.js";
-import { trim } from "@/utils/strings.js";
-import axios from "axios";
+import { bufferLike, trim } from "@/utils/strings.js";
 
 /** @param {import("@/jsdoc.js").User} user */
 async function myanimelist(user) {
@@ -62,19 +61,14 @@ async function myanimelist(user) {
    * @returns
    */
 	async function entry(item) {
-		const res = await axios.get(item.entry.images.webp.image_url, { responseType: "arraybuffer" });
-		const buffer = res.data;
-		const base64 = buffer.toString("base64");
-
-		const base64img = `data:image/png;base64,${base64}`;
 
 		return `<div class="flex items-start justify-start w-full gap-2">
-          <img src="${base64img}" class="h-[60px] w-[40px] rounded-sm" />
+          <img src="${await bufferLike(item.entry.images.webp.image_url)}" class="h-[60px] w-[40px] rounded-sm" />
           <div class="flex  items-end gap-16  w-full">
            <div class="w-full">
               <span class="text-sm">${trim(item.entry.title, 60)}</span>
             <div class="w-full h-4 bg-[#272727] rounded-sm py-[2px] px-[4px]">
-              ${item.episodes_seen && item.episodes_total ? `<div class="h-full w-[${calculate(item.episodes_seen, item.episodes_total)}%] bg-[${Colors[item.status]}] rounded-sm"></div>` : `<div class="h-full w-[25%] bg-[${Colors[item.status]}] rounded-sm"></div>`}
+              ${(item.episodes_seen && item.episodes_total) ? `<div class="h-full bg-[${Colors[item.status]}] rounded-sm" style="width: ${calculate(item.episodes_seen, item.episodes_total)}%"></div>` : `<div class="h-full bg-[${Colors[item.status]}] rounded-sm" style="width: 25%"></div>`}
             </div>
              <div class="flex m-1 justify-between items-center">
                <span class="text-xs">${item.status} <span class="text-white">${item.episodes_seen || "∞"}</span>/${item.episodes_total || "∞"} · Scored <span class="${item.score === 0 ? "text-[#9ca3af]" : "text-white"}">${item.score || "-"}</span></span>
