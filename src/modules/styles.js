@@ -378,4 +378,6 @@ const myanimelist = he.encode(`/*! tailwindcss v4.1.5 | MIT License | https://ta
 }
 `);
 
-export default { myanimelist };
+const anilist = myanimelist;
+
+export default { myanimelist, anilist };
