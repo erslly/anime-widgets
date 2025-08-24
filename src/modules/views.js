@@ -135,7 +135,7 @@ async function myanimelist(user) {
  */
 async function anilist(user) {
 	function summary() {
-		const days = user.statistics.anime.minutesWatched ? (user.statistics.anime.minutesWatched / 60 / 24).toFixed(1) : '-';
+		const days = user.statistics.anime.minutesWatched ? (user.statistics.anime.minutesWatched / 60 / 24).toFixed(1) : "-";
 		return `<div class="flex justify-between text-xs font-light text-white">
       <div>
         <span class="font-normal text-[#9ca3af]">Days:</span>
@@ -143,7 +143,7 @@ async function anilist(user) {
       </div>
       <div>
         <span class="font-normal text-[#9ca3af]">Mean Score:</span>
-        ${user.statistics.anime.meanScore}
+        ${((Number(user.statistics.anime.meanScore) / 100) * 10).toFixed(1)}
       </div>
     </div>`;
 	}
@@ -178,12 +178,12 @@ async function anilist(user) {
 
 	async function entry(item) {
 		return `<div class="flex items-start justify-start w-full gap-2">
-          <img src="${item.media.coverImage.large}" class="h-[60px] w-[40px] rounded-sm" />
+          <img src="${await bufferLike(item.media.coverImage.large)}" class="h-[60px] w-[40px] rounded-sm" />
           <div class="flex  items-end gap-16  w-full">
            <div class="w-full">
               <span class="text-sm">${trim(item.media.title.romaji, 60)}</span>
             <div class="w-full h-4 bg-[#272727] rounded-sm py-[2px] px-[4px]">
-              ${(item.progress && item.media.episodes) ? `<div class="h-full bg-[#338543] rounded-sm" style="width: ${calculate(item.progress, item.media.episodes)}%"></div>` : `<div class="h-full bg-[#338543] rounded-sm" style="width: 25%"></div>`}
+              ${(item.progress && item.media.episodes) ? `<div class="h-full bg-[#338543] rounded-sm" style="width: ${calculate(item.progress, item.media.episodes)}%"></div>` : "<div class=\"h-full bg-[#338543] rounded-sm\" style=\"width: 25%\"></div>"}
             </div>
              <div class="flex m-1 justify-between items-center">
                <span class="text-xs">${item.status} <span class="text-white">${item.progress || "∞"}</span>/${item.media.episodes || "∞"} · Scored <span class="${item.score === 0 ? "text-[#9ca3af]" : "text-white"}">${item.score || "-"}</span></span>
@@ -236,4 +236,4 @@ async function anilist(user) {
   </div>`;
 }
 
-export default {myanimelist,anilist};
+export default { myanimelist, anilist };
