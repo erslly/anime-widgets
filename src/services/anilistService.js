@@ -1,6 +1,7 @@
 // @ts-check
 import axios from "axios";
 import { anilistUserQuery } from "@/utils/query.js";
+import { API_ENDPOINTS, API_TIMEOUTS, ANILIST_HEADERS } from "@/constants/api.js";
 
 export async function fetchAnilistUser(username) {
 	const query = {
@@ -9,9 +10,9 @@ export async function fetchAnilistUser(username) {
 	};
 
 	try {
-		const response = await axios.post("https://graphql.anilist.co", query, {
-			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-			timeout: 10 * 1000
+		const response = await axios.post(API_ENDPOINTS.ANILIST, query, {
+			headers: ANILIST_HEADERS,
+			timeout: API_TIMEOUTS.ANILIST
 		});
 		return response;
 	} catch (error) {

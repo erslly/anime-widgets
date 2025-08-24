@@ -3,11 +3,12 @@ import headers from "@/middlewares/headers.js";
 import styles from "@/modules/styles.js";
 import views from "@/modules/views.js";
 import svg from "@/utils/svg.js";
-import { validateUsername } from "@/functions/validation.js";
+import { validateUsername, hasAnimeData } from "@/functions/validation.js";
 import { handleApiError, createSvgResponse } from "@/functions/api.js";
 import { mapAnilistData, mapMyAnimeListData } from "@/functions/mapping.js";
 import { fetchAnilistUser } from "@/services/anilistService.js";
 import { fetchMyAnimeListUser } from "@/services/myAnimeListService.js";
+import { ERROR_MESSAGES } from "@/constants/messages.js";
 import { Router } from "express";
 
 const router = Router({
@@ -18,7 +19,7 @@ const router = Router({
 router.get("/widgets/myanimelist", headers.svg, async (req, res) => {
 	const userName = String(req.query.username || '');
 	if (!validateUsername(userName)) {
-		res.status(400).send(svg.error("Oops! Username is missing.", "Please provide a username to continue. We need this to find your profile!"));
+		res.status(400).send(svg.error(ERROR_MESSAGES.USERNAME_MISSING.title, ERROR_MESSAGES.USERNAME_MISSING.description));
 		return;
 	}
 
@@ -26,10 +27,10 @@ router.get("/widgets/myanimelist", headers.svg, async (req, res) => {
 		const httpResponse = await fetchMyAnimeListUser(userName);
 		const user = mapMyAnimeListData(httpResponse);
 		
-		if (!(user.updates && user.updates?.anime && user.statistics.anime.mean_score >= 1)) {
-			res.status(400).send(svg.error("No Data Available", "Please add some anime activity to continue."));
-			return;
-		}
+			if (!hasAnimeData(user, 'mal')) {
+		res.status(400).send(svg.error(ERROR_MESSAGES.NO_DATA_AVAILABLE.title, ERROR_MESSAGES.NO_DATA_AVAILABLE.description));
+		return;
+	}
 
 		createSvgResponse(styles.myanimelist, await views.myanimelist(user), res);
 	} catch (error) {
@@ -40,7 +41,7 @@ router.get("/widgets/myanimelist", headers.svg, async (req, res) => {
 router.get("/widgets/anilist", headers.svg, async (req, res) => {
 	const userName = String(req.query.username || '');
 	if (!validateUsername(userName)) {
-		res.status(400).send(svg.error("Oops! Username is missing.", "Please provide a username to continue. We need this to find your profile!"));
+		res.status(400).send(svg.error(ERROR_MESSAGES.USERNAME_MISSING.title, ERROR_MESSAGES.USERNAME_MISSING.description));
 		return;
 	}
 
@@ -53,8 +54,8 @@ router.get("/widgets/anilist", headers.svg, async (req, res) => {
 		}
 
 		const user = mapAnilistData(httpResponse);
-		if (!(user.statistics && user.statistics.anime && user.statistics.anime.meanScore >= 1)) {
-			res.status(400).send(svg.error("No Data Available", "Please add some anime activity to continue."));
+		if (!hasAnimeData(user, 'anilist')) {
+			res.status(400).send(svg.error(ERROR_MESSAGES.NO_DATA_AVAILABLE.title, ERROR_MESSAGES.NO_DATA_AVAILABLE.description));
 			return;
 		}
 
