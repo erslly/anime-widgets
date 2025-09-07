@@ -1,7 +1,13 @@
 // @ts-check
 import he from "he";
+import { generateThemeCSS } from "@/utils/theme.js";
 
-const myanimelist = he.encode(`/*! tailwindcss v4.1.5 | MIT License | https://tailwindcss.com */
+/**
+ * @param {string} themeName
+ * @returns {string}
+ */
+function generateStyledCSS(themeName) {
+	const baseCSS = `/*! tailwindcss v4.1.5 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -376,8 +382,12 @@ const myanimelist = he.encode(`/*! tailwindcss v4.1.5 | MIT License | https://ta
     }
   }
 }
-`);
+`;
 
-const anilist = myanimelist;
+	return he.encode(baseCSS + generateThemeCSS(themeName));
+}
 
-export default { myanimelist, anilist };
+const myanimelist = generateStyledCSS('default');
+const anilist = generateStyledCSS('default');
+
+export default { myanimelist, anilist, generateStyledCSS };

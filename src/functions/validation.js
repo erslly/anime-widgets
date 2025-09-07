@@ -1,6 +1,11 @@
 // @ts-check
+import { isValidTheme } from "@/constants/themes.js";
 export function validateUsername(username) {
 	return username && username.trim().length > 0;
+}
+
+export function validateTheme(theme) {
+	return (!theme || isValidTheme(theme));
 }
 
 export function hasAnimeData(user, platform = 'mal') {
