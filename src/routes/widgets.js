@@ -17,39 +17,6 @@ const router = Router({
 	strict: true,
 });
 
-/**
- * @swagger
- * /widgets/myanimelist:
- *   get:
- *     summary: Generate MyAnimeList statistics widget
- *     description: Creates an SVG widget displaying user's MyAnimeList anime statistics and recent updates
- *     tags: [Widgets]
- *     parameters:
- *       - $ref: '#/components/parameters/Username'
- *       - $ref: '#/components/parameters/Theme'
- *     responses:
- *       200:
- *         $ref: '#/components/responses/WidgetSuccess'
- *       400:
- *         $ref: '#/components/responses/BadRequest'
- *       404:
- *         $ref: '#/components/responses/NotFound'
- *       500:
- *         $ref: '#/components/responses/ServerError'
- *     examples:
- *       - summary: Default theme
- *         value:
- *           username: "erslly"
- *           theme: "default"
- *       - summary: Tokyo Night theme
- *         value:
- *           username: "erslly"
- *           theme: "tokyonight"
- *       - summary: Rule34 theme
- *         value:
- *           username: "erslly"
- *           theme: "rule34"
- */
 router.get("/widgets/myanimelist", headers.svg, async (req, res) => {
 	const userName = String(req.query.username || '');
 	const theme = String(req.query.theme || 'default');
@@ -80,39 +47,6 @@ router.get("/widgets/myanimelist", headers.svg, async (req, res) => {
 	}
 });
 
-/**
- * @swagger
- * /widgets/anilist:
- *   get:
- *     summary: Generate AniList statistics widget
- *     description: Creates an SVG widget displaying user's AniList anime statistics and recent updates
- *     tags: [Widgets]
- *     parameters:
- *       - $ref: '#/components/parameters/Username'
- *       - $ref: '#/components/parameters/Theme'
- *     responses:
- *       200:
- *         $ref: '#/components/responses/WidgetSuccess'
- *       400:
- *         $ref: '#/components/responses/BadRequest'
- *       404:
- *         $ref: '#/components/responses/NotFound'
- *       500:
- *         $ref: '#/components/responses/ServerError'
- *     examples:
- *       - summary: Default theme
- *         value:
- *           username: "erslly"
- *           theme: "default"
- *       - summary: Dracula theme
- *         value:
- *           username: "erslly"
- *           theme: "dracula"
- *       - summary: Nord theme
- *         value:
- *           username: "erslly"
- *           theme: "nord"
- */
 router.get("/widgets/anilist", headers.svg, async (req, res) => {
 	const userName = String(req.query.username || '');
 	const theme = String(req.query.theme || 'default');
@@ -148,24 +82,6 @@ router.get("/widgets/anilist", headers.svg, async (req, res) => {
 	}
 });
 
-/**
- * @swagger
- * /themes:
- *   get:
- *     summary: Get available themes
- *     description: Returns a list of all available themes for widgets
- *     tags: [Themes]
- *     responses:
- *       200:
- *         description: List of available themes
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AvailableThemes'
- *             example:
- *               themes: ["default", "tokyonight", "rule34", "dracula", "nord", "catppuccin", "gruvbox", "monokai"]
- *               message: "Available themes for widgets"
- */
 router.get("/themes", (req, res) => {
 	res.json({
 		themes: getAvailableThemes(),
