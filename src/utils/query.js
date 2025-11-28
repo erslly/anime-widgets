@@ -1,5 +1,5 @@
 // @ts-check
-export const anilistUserQuery = `query ($name: String) {
+export default `query ($name: String) {
   User(name: $name) {
     id
     name

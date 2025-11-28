@@ -1,12 +1,12 @@
 // @ts-check
-import he from "he";
 import { generateThemeCSS } from "@/utils/theme.js";
+import he from "he";
 
 /**
- * @param {string} themeName
+ * @param {string?} themeName
  * @returns {string}
  */
-function generateStyledCSS(themeName) {
+function generateStyledCSS(themeName = "default") {
 	const baseCSS = `/*! tailwindcss v4.1.5 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
@@ -387,7 +387,7 @@ function generateStyledCSS(themeName) {
 	return he.encode(baseCSS + generateThemeCSS(themeName));
 }
 
-const myanimelist = generateStyledCSS('default');
-const anilist = generateStyledCSS('default');
+const myanimelist = generateStyledCSS();
+const anilist = generateStyledCSS();
 
 export default { myanimelist, anilist, generateStyledCSS };

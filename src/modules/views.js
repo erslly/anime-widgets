@@ -5,7 +5,6 @@ import { calculate } from "@/utils/math.js";
 import { bufferLike, trim } from "@/utils/strings.js";
 import { getStatusClass } from "@/utils/theme.js";
 
-/** @param {import("@/jsdoc.js").User} user */
 async function myanimelist(user) {
 	function summary() {
 		return `<div class="flex justify-between text-xs font-light theme-text-primary">
@@ -57,10 +56,6 @@ async function myanimelist(user) {
     </div>`;
 	}
 
-	/**
-   * @param {import("@/jsdoc.js").UpdateItem} item
-   * @returns
-   */
 	async function entry(item) {
 
 		return `<div class="flex items-start justify-start w-full gap-2">
@@ -136,7 +131,7 @@ async function myanimelist(user) {
  */
 async function anilist(user) {
 	function summary() {
-		const days = user.statistics.anime.minutesWatched ? (user.statistics.anime.minutesWatched / 60 / 24).toFixed(1) : '-';
+		const days = user.statistics.anime.minutesWatched ? (user.statistics.anime.minutesWatched / 60 / 24).toFixed(1) : "-";
 		return `<div class="flex justify-between text-xs font-light theme-text-primary">
       <div>
         <span class="font-normal theme-text-secondary">Days:</span>
@@ -184,7 +179,7 @@ async function anilist(user) {
            <div class="w-full">
               <span class="text-sm theme-text-primary">${trim(item.media.title.romaji, 60)}</span>
             <div class="w-full h-4 theme-progress-bg rounded-sm py-[2px] px-[4px]">
-              ${(item.progress && item.media.episodes) ? `<div class="h-full theme-progress-active rounded-sm" style="width: ${calculate(item.progress, item.media.episodes)}%"></div>` : `<div class="h-full theme-progress-active rounded-sm" style="width: 25%"></div>`}
+              ${(item.progress && item.media.episodes) ? `<div class="h-full theme-progress-active rounded-sm" style="width: ${calculate(item.progress, item.media.episodes)}%"></div>` : "<div class=\"h-full theme-progress-active rounded-sm\" style=\"width: 25%\"></div>"}
             </div>
              <div class="flex m-1 justify-between items-center">
                <span class="text-xs theme-text-secondary">${item.status} <span class="theme-text-primary">${item.progress || "∞"}</span>/${item.media.episodes || "∞"} · Scored <span class="${item.score === 0 ? "theme-text-muted" : "theme-text-primary"}">${item.score || "-"}</span></span>

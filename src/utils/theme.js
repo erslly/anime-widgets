@@ -1,13 +1,13 @@
 // @ts-check
-import { getTheme } from "@/constants/themes.js";
+import themes from "@/modules/themes.js";
 
 /**
  * @param {string} themeName
  * @returns {string}
  */
 export function generateThemeCSS(themeName) {
-	const theme = getTheme(themeName);
-	
+	const theme = themes.get(themeName);
+
 	return `
 		:root {
 			--theme-bg: ${theme.background};
@@ -45,17 +45,17 @@ export function generateThemeCSS(themeName) {
  */
 export function getStatusClass(status) {
 	const statusMap = {
-		'Watching': 'theme-status-watching',
-		'Completed': 'theme-status-completed', 
-		'On-Hold': 'theme-status-on-hold',
-		'Dropped': 'theme-status-dropped',
-		'Plan to Watch': 'theme-status-plan-to-watch',
-		'CURRENT': 'theme-status-watching',
-		'COMPLETED': 'theme-status-completed',
-		'PAUSED': 'theme-status-on-hold',
-		'DROPPED': 'theme-status-dropped',
-		'PLANNING': 'theme-status-plan-to-watch'
+		"Watching": "theme-status-watching",
+		"Completed": "theme-status-completed",
+		"On-Hold": "theme-status-on-hold",
+		"Dropped": "theme-status-dropped",
+		"Plan to Watch": "theme-status-plan-to-watch",
+		"CURRENT": "theme-status-watching",
+		"COMPLETED": "theme-status-completed",
+		"PAUSED": "theme-status-on-hold",
+		"DROPPED": "theme-status-dropped",
+		"PLANNING": "theme-status-plan-to-watch",
 	};
-	
-	return statusMap[status] || 'theme-status-watching';
+
+	return statusMap[status] || "theme-status-watching";
 }

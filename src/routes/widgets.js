@@ -1,15 +1,12 @@
 // @ts-check
+import builds from "@/functions/builds.js";
 import headers from "@/middlewares/headers.js";
 import styles from "@/modules/styles.js";
+import themes from "@/modules/themes.js";
 import views from "@/modules/views.js";
+import ErrorMap from "@/utils/error-map.js";
+import services from "@/utils/services.js";
 import svg from "@/utils/svg.js";
-import { validateUsername, hasAnimeData, validateTheme } from "@/functions/validation.js";
-import { handleApiError, createSvgResponse } from "@/functions/api.js";
-import { mapAnilistData, mapMyAnimeListData } from "@/functions/mapping.js";
-import { fetchAnilistUser } from "@/services/anilistService.js";
-import { fetchMyAnimeListUser } from "@/services/myAnimeListService.js";
-import { ERROR_MESSAGES } from "@/constants/messages.js";
-import { getAvailableThemes } from "@/constants/themes.js";
 import { Router } from "express";
 
 const router = Router({
@@ -18,74 +15,75 @@ const router = Router({
 });
 
 router.get("/widgets/myanimelist", headers.svg, async (req, res) => {
-	const userName = String(req.query.username || '');
-	const theme = String(req.query.theme || 'default');
-	
-	if (!validateUsername(userName)) {
-		res.status(400).send(svg.error(ERROR_MESSAGES.USERNAME_MISSING.title, ERROR_MESSAGES.USERNAME_MISSING.description));
+	const userName = String(req.query.username || "");
+	const theme = String(req.query.theme || "default");
+
+	if (!(userName && userName.trim().length > 0)) {
+		res.status(400).send(svg.error(ErrorMap.UsernameMissing.Title, ErrorMap.UsernameMissing.Description));
 		return;
 	}
 
-	if (!validateTheme(theme)) {
-		res.status(400).send(svg.error("Invalid Theme", "The specified theme is not supported. Please use a valid theme name."));	
+	if (!(!theme || themes.check(theme))) {
+		res.status(400).send(svg.error(ErrorMap.InvalidTheme.Title, ErrorMap.InvalidTheme.Description));
 		return;
 	}
 
 	try {
-		const httpResponse = await fetchMyAnimeListUser(userName);
-		const user = mapMyAnimeListData(httpResponse);
-		
-		if (!hasAnimeData(user, 'mal')) {
-			res.status(400).send(svg.error(ERROR_MESSAGES.NO_DATA_AVAILABLE.title, ERROR_MESSAGES.NO_DATA_AVAILABLE.description));
+		const httpResponse = await services.myanimelist(userName);
+		const user = builds.myanimelist(httpResponse);
+
+		if (!(user.updates && user.updates?.anime && user.statistics.anime.mean_score >= 1)) {
+			res.status(400).send(svg.error(ErrorMap.NoDataAvailable.Title, ErrorMap.NoDataAvailable.Description));
 			return;
 		}
 
-		const styledCSS = styles.generateStyledCSS(theme);
-		createSvgResponse(styledCSS, await views.myanimelist(user), res);
-	} catch (error) {
-		handleApiError(error, res);
+		const css = styles.generateStyledCSS(theme);
+		const html = await views.myanimelist(user);
+
+		res.status(200).send(svg.create({ css, html }));
+	}
+	catch {
+		res.status(500).send(svg.error(ErrorMap.ApiError.Title, ErrorMap.ApiError.Description));
 	}
 });
 
 router.get("/widgets/anilist", headers.svg, async (req, res) => {
-	const userName = String(req.query.username || '');
-	const theme = String(req.query.theme || 'default');
-	
-	if (!validateUsername(userName)) {
-		res.status(400).send(svg.error(ERROR_MESSAGES.USERNAME_MISSING.title, ERROR_MESSAGES.USERNAME_MISSING.description));
+	const userName = String(req.query.username || "");
+	const theme = String(req.query.theme || "default");
+
+	if (!(userName && userName.trim().length > 0)) {
+		res.status(400).send(svg.error(ErrorMap.UsernameMissing.Title, ErrorMap.UsernameMissing.Description));
 		return;
 	}
 
-	if (!validateTheme(theme)) {
-		res.status(400).send(svg.error("Invalid Theme", "The specified theme is not supported. Please use a valid theme name."));
+	if (!(!theme || themes.check(theme))) {
+		res.status(400).send(svg.error(ErrorMap.InvalidTheme.Title, ErrorMap.InvalidTheme.Description));
 		return;
 	}
 
 	try {
-		const httpResponse = await fetchAnilistUser(userName);
-		
-		if (!httpResponse.data?.data?.User) {
-			handleApiError(null, res);
+		const httpResponse = await services.anilist(userName);
+		const user = builds.anilist(httpResponse);
+
+		if (!(user.statistics && user.statistics.anime && user.statistics.anime.meanScore >= 1)) {
+			res.status(400).send(svg.error(ErrorMap.NoDataAvailable.Title, ErrorMap.NoDataAvailable.Description));
 			return;
 		}
 
-		const user = mapAnilistData(httpResponse);
-		if (!hasAnimeData(user, 'anilist')) {
-			res.status(400).send(svg.error(ERROR_MESSAGES.NO_DATA_AVAILABLE.title, ERROR_MESSAGES.NO_DATA_AVAILABLE.description));
-			return;
-		}
+		const css = styles.generateStyledCSS(theme);
+		const html = await views.anilist(user);
 
-		const styledCSS = styles.generateStyledCSS(theme);
-		createSvgResponse(styledCSS, await views.anilist(user), res);
-	} catch (error) {
-		handleApiError(error, res);
+		res.status(200).send(svg.create({ css, html }));
+	}
+	catch {
+		res.status(500).send(svg.error(ErrorMap.ApiError.Title, ErrorMap.ApiError.Description));
 	}
 });
 
 router.get("/themes", (req, res) => {
 	res.json({
-		themes: getAvailableThemes(),
-		message: "Available themes for widgets"
+		themes: themes.keys(),
+		message: "Available themes for widgets",
 	});
 });
 
