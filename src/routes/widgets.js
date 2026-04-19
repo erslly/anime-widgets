@@ -1,12 +1,12 @@
 // @ts-check
-import builds from "@/functions/builds.js";
-import headers from "@/middlewares/headers.js";
-import styles from "@/modules/styles.js";
-import themes from "@/modules/themes.js";
-import views from "@/modules/views.js";
-import ErrorMap from "@/utils/error-map.js";
-import services from "@/utils/services.js";
-import svg from "@/utils/svg.js";
+import builds from "../functions/builds.js";
+import headers from "../middlewares/headers.js";
+import styles from "../modules/styles.js";
+import themes from "../modules/themes.js";
+import views from "../modules/views.js";
+import ErrorMap from "../utils/error-map.js";
+import services from "../utils/services.js";
+import svg from "../utils/svg.js";
 import { Router } from "express";
 
 const router = Router({

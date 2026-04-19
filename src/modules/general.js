@@ -1,5 +1,5 @@
 // @ts-check
-import settings from "@/settings.js";
+import settings from "../settings.js";
 
 export const Colors = {
 	Watching: "#338543",

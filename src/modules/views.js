@@ -1,9 +1,9 @@
 // @ts-check
-import { Colors, headers } from "@/modules/general.js";
-import { dateFormat } from "@/utils/date.js";
-import { calculate } from "@/utils/math.js";
-import { bufferLike, trim } from "@/utils/strings.js";
-import { getStatusClass } from "@/utils/theme.js";
+import { Colors, headers } from "../modules/general.js";
+import { dateFormat } from "../utils/date.js";
+import { calculate } from "../utils/math.js";
+import { bufferLike, trim } from "../utils/strings.js";
+import { getStatusClass } from "../utils/theme.js";
 
 async function myanimelist(user) {
 	function summary() {

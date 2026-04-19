@@ -1,5 +1,5 @@
 // @ts-check
-import { generateThemeCSS } from "@/utils/theme.js";
+import { generateThemeCSS } from "../utils/theme.js";
 import he from "he";
 
 /**

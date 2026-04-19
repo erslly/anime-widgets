@@ -1,7 +1,7 @@
 // @ts-check
-import settings from "@/settings.js";
-import { timeFormat } from "@/utils/date.js";
-import { any, require } from "@/utils/general.js";
+import settings from "./settings.js";
+import { timeFormat } from "./utils/date.js";
+import { any, require } from "./utils/general.js";
 import chalk from "chalk";
 import cors from "cors";
 import express from "express";

@@ -1,5 +1,5 @@
 // @ts-check
-import themes from "@/modules/themes.js";
+import themes from "../modules/themes.js";
 
 /**
  * @param {string} themeName

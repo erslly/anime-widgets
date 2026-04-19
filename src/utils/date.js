@@ -1,5 +1,5 @@
 // @ts-check
-import { pad } from "@/utils/general.js";
+import { pad } from "../utils/general.js";
 
 /**
  *
