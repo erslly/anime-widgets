@@ -4,7 +4,7 @@
     "node": "20.x"
   },
   "scripts": {
-    "start": "node -e 'console.clear()' && bun run --no-warnings ./src/index.js"
+    "start": "node ./src/index.js"
   },
   "devDependencies": {
     "eslint": "^9.16.0",
