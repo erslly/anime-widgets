@@ -22,13 +22,13 @@ We can connect to AniList the same way we connect to MyAnimeList here.
 ### MyAnimeList
 
 ```
-GET https://geniusanime.com/widgets/myanimelist?username=[MAL_USERNAME]
+GET https://awidgets.erslly.dev/widgets/myanimelist?username=[MAL_USERNAME]
 ```
 
 ### AniList
 
 ```
-GET https://geniusanime.com/widgets/anilist?username=[ANILIST_USERNAME]
+GET https://awidgets.erslly.dev/widgets/anilist?username=[ANILIST_USERNAME]
 ```
 
 ### Themes
@@ -44,13 +44,13 @@ Available themes:
 #### MyAnimeList Theme Example
 
 ```
-GET https://geniusanime.com/widgets/myanimelist?username=[MAL_USERNAME]&theme=dracula
+GET https://awidgets.erslly.dev/widgets/myanimelist?username=[MAL_USERNAME]&theme=dracula
 ```
 
 #### AniList Theme Example
 
 ```
-GET https://geniusanime.com/widgets/anilist?username=[ANILIST_USERNAME]&theme=tokyonight
+GET https://awidgets.erslly.dev/widgets/anilist?username=[ANILIST_USERNAME]&theme=tokyonight
 ```
 
 ## Known Issues
