@@ -10,7 +10,7 @@ import helmet from "helmet";
 const app = express();
 app.use(cors(), helmet(), express.json());
 
-app.use(any(require("@/routes/widgets.js")));
+app.use(any(require("./routes/widgets.js")));
 
 app.listen(settings.api.port, () => console.log([
 	`${chalk.gray(timeFormat())} 🎉 ${chalk.bold("thunder.rest")} is ready for request usage.`,

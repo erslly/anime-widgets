@@ -18,7 +18,7 @@ const settings = {
 		port: 3000,
 	},
 	get url() {
-		return `https://localhost:${this.api.port}`;
+		return `http://localhost:${this.api.port}`;
 	},
 };
 
