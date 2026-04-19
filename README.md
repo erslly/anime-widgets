@@ -12,8 +12,8 @@ Would you like a profile widget that shows a summary such as your most recently 
 
 ## Preview
 
-![anime-widgets](https://geniusanime.com/widgets/myanimelist?username=ryokacchi)
-![anime-widgets](https://geniusanime.com/widgets/anilist?username=erslly&theme=monokai)
+![anime-widgets](https://awidgets.erslly.dev/widgets/myanimelist?username=ryokacchi)
+![anime-widgets](https://awidgets.erslly.dev/widgets/anilist?username=erslly&theme=monokai)
 
 ## Usage
 
