@@ -13,9 +13,9 @@
 
 /** @type {Settings} */
 const settings = {
-	node: "development",
+	node: (process.env.NODE_ENV === "production") ? "production" : "development",
 	api: {
-		port: 3000,
+		port: Number(process.env.PORT) || 3000,
 	},
 	get url() {
 		return `http://localhost:${this.api.port}`;
